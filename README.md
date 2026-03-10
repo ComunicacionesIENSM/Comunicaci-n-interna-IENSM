@@ -1,1 +1,1 @@
-# Comunicaci-n-interna-IENSM
+# Comunicacion interna-IENSM
