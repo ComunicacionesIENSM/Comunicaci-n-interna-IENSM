@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero Institucional · Normal Superior de Medellín</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --verde:        #0f2d1c;
+  --verde-medio:  #1e5c38;
+  --verde-claro:  #2e8a54;
+  --crema:        #f4ede0;
+  --crema-oscuro: #e2d5c0;
+  --dorado:       #c8913a;
+  --dorado-claro: #e8b96a;
+  --dorado-suave: rgba(200,145,58,0.15);
+  --rojo:         #b83228;
+  --azul:         #1b3f6b;
+  --texto:        #1a1a1a;
+  --blanco:       #ffffff;
+  --sombra:       0 8px 32px rgba(0,0,0,0.18);
+  --radio:        14px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--verde);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 10% 80%, rgba(46,138,84,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(200,145,58,0.12) 0%, transparent 55%);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  color: var(--texto);
+}
+
+/* HEADER */
+header {
+  background: linear-gradient(160deg, #07180e 0%, #0f2d1c 60%, #163d26 100%);
+  border-bottom: 2px solid var(--dorado);
+  box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  position: sticky; top: 0; z-index: 200;
+}
+.header-inner {
+  max-width: 1300px; margin: 0 auto;
+  padding: 16px 36px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.escudo {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--dorado), var(--dorado-claro));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(200,145,58,0.3), 0 4px 16px rgba(0,0,0,0.3);
+}
+.titulo-institucional h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem; color: var(--crema);
+  line-height: 1.25; letter-spacing: 0.01em;
+}
+.titulo-institucional p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; color: var(--dorado-claro);
+  letter-spacing: 0.18em; text-transform: uppercase; margin-top: 3px;
+}
+.logo-grupo { display: flex; align-items: center; gap: 14px; }
+.reloj-widget {
+  text-align: right;
+  background: rgba(200,145,58,0.1);
+  border: 1px solid rgba(200,145,58,0.3);
+  border-radius: 8px; padding: 8px 14px;
+}
+.reloj-widget .hora-actual {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; color: var(--crema); line-height: 1;
+}
+.reloj-widget .fecha-actual {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem; color: var(--dorado-claro);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px;
+}
+
+/* TABS */
+.tabs-bar {
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(200,145,58,0.2);
+}
+.tabs-inner {
+  max-width: 1300px; margin: 0 auto;
+  padding: 0 36px; display: flex; gap: 2px; overflow-x: auto;
+}
+.tab-btn {
+  padding: 13px 22px; background: transparent; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+  color: rgba(244,237,224,0.55); letter-spacing: 0.04em; text-transform: uppercase;
+  border-bottom: 3px solid transparent; transition: all 0.2s;
+  white-space: nowrap; display: flex; align-items: center; gap: 8px;
+}
+.tab-btn:hover { color: var(--crema); }
+.tab-btn.activo { color: var(--dorado-claro); border-bottom-color: var(--dorado); }
+
+/* MAIN */
+.main { max-width: 1300px; margin: 0 auto; padding: 36px 36px 60px; }
+.seccion { display: none; }
+.seccion.activa { display: block; animation: fadeIn 0.35s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.seccion-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 28px; padding-bottom: 16px;
+  border-bottom: 1px solid rgba(200,145,58,0.25);
+}
+.seccion-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem; color: var(--crema); line-height: 1;
+}
+.seccion-header p {
+  font-size: 0.8rem; color: rgba(244,237,224,0.5); margin-top: 5px;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.08em;
+}
+
+/* TABLERO DE LETREROS */
+.tablero {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+.letrero {
+  border-radius: var(--radio); padding: 26px 24px 22px;
+  box-shadow: var(--sombra); position: relative; overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s; cursor: default;
+}
+.letrero:hover {
+  transform: translateY(-4px) rotate(-0.4deg);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.28);
+}
+.letrero::before {
+  content: ''; position: absolute; top: 14px; left: 50%;
+  transform: translateX(-50%); width: 14px; height: 14px;
+  border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 2;
+}
+.letrero.urgente  { background: #fff8f0; border-top: 5px solid var(--rojo); }
+.letrero.urgente::before  { background: var(--rojo); }
+.letrero.info     { background: #f0f5ff; border-top: 5px solid var(--azul); }
+.letrero.info::before     { background: var(--azul); }
+.letrero.general  { background: #fffdf0; border-top: 5px solid var(--dorado); }
+.letrero.general::before  { background: var(--dorado); }
+.letrero.verde    { background: #f0fff5; border-top: 5px solid var(--verde-claro); }
+.letrero.verde::before    { background: var(--verde-claro); }
+.letrero-tipo {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500;
+  margin-top: 12px; margin-bottom: 10px; opacity: 0.6;
+}
+.letrero.urgente .letrero-tipo { color: var(--rojo); }
+.letrero.info .letrero-tipo    { color: var(--azul); }
+.letrero.general .letrero-tipo { color: #7a6020; }
+.letrero.verde .letrero-tipo   { color: var(--verde-medio); }
+.letrero h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.1rem;
+  line-height: 1.3; color: #1a1a1a; margin-bottom: 10px;
+}
+.letrero p { font-size: 0.83rem; line-height: 1.6; color: #444; }
+.letrero-fecha {
+  margin-top: 16px; font-family: 'DM Mono', monospace;
+  font-size: 0.62rem; color: #999; letter-spacing: 0.08em;
+}
+
+/* CRONOGRAMA */
+.cronograma-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px;
+}
+.mes-card {
+  background: rgba(244,237,224,0.06); border: 1px solid rgba(200,145,58,0.2);
+  border-radius: var(--radio); overflow: hidden; transition: transform 0.2s;
+}
+.mes-card:hover { transform: translateY(-2px); }
+.mes-header {
+  padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(200,145,58,0.2);
+}
+.mes-nombre { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--crema); }
+.mes-num {
+  font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--dorado-claro);
+  background: var(--dorado-suave); padding: 3px 8px; border-radius: 4px; letter-spacing: 0.1em;
+}
+.mes-eventos { padding: 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+.evento-item { display: flex; gap: 12px; align-items: flex-start; }
+.evento-dia {
+  font-family: 'DM Mono', monospace; font-size: 0.75rem;
+  color: var(--dorado-claro); min-width: 34px; padding-top: 1px; font-weight: 500;
+}
+.evento-desc { font-size: 0.82rem; color: rgba(244,237,224,0.8); line-height: 1.45; }
+.evento-tag {
+  display: inline-block; font-size: 0.58rem; font-family: 'DM Mono', monospace;
+  text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 7px;
+  border-radius: 3px; margin-left: 6px; vertical-align: middle;
+}
+.tag-acad { background: rgba(27,63,107,0.35); color: #7ab3e8; }
+.tag-inst { background: rgba(200,145,58,0.2); color: var(--dorado-claro); }
+.tag-eval { background: rgba(184,50,40,0.2);  color: #e87a7a; }
+.tag-com  { background: rgba(46,138,84,0.25); color: #7adba4; }
+
+/* COMUNICADOS */
+.comunicados-lista { display: flex; flex-direction: column; gap: 16px; }
+.comunicado-card {
+  background: rgba(244,237,224,0.06); border: 1px solid rgba(200,145,58,0.18);
+  border-left: 4px solid var(--dorado); border-radius: 0 var(--radio) var(--radio) 0;
+  padding: 22px 26px; display: flex; gap: 24px; align-items: flex-start;
+  transition: background 0.2s;
+}
+.comunicado-card:hover { background: rgba(244,237,224,0.09); }
+.com-nivel {
+  background: var(--dorado-suave); border: 1px solid rgba(200,145,58,0.3);
+  border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 80px; flex-shrink: 0;
+}
+.com-nivel .nivel-texto {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--dorado-claro);
+  letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px;
+}
+.com-nivel .nivel-grado {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--crema); line-height: 1.1;
+}
+.com-body h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--crema); margin-bottom: 8px;
+}
+.com-body p { font-size: 0.83rem; color: rgba(244,237,224,0.65); line-height: 1.65; }
+.com-meta { display: flex; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
+.com-meta span {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: rgba(244,237,224,0.4); letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* EVENTOS */
+.eventos-lista {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;
+}
+.evento-card {
+  background: rgba(244,237,224,0.05); border: 1px solid rgba(200,145,58,0.18);
+  border-radius: var(--radio); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+}
+.evento-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.25); }
+.evento-banner { height: 8px; }
+.evento-card.academico     .evento-banner { background: linear-gradient(90deg, var(--azul), #3a6db3); }
+.evento-card.institucional .evento-banner { background: linear-gradient(90deg, var(--dorado), var(--dorado-claro)); }
+.evento-card.comunidad     .evento-banner { background: linear-gradient(90deg, var(--verde-claro), #5abf7a); }
+.evento-cuerpo { padding: 20px 22px; }
+.evento-fecha-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--dorado-suave); border-radius: 6px; padding: 5px 12px; margin-bottom: 14px;
+}
+.evento-fecha-badge span {
+  font-family: 'DM Mono', monospace; font-size: 0.65rem;
+  color: var(--dorado-claro); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.evento-cuerpo h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.05rem;
+  color: var(--crema); margin-bottom: 8px; line-height: 1.3;
+}
+.evento-cuerpo p { font-size: 0.82rem; color: rgba(244,237,224,0.6); line-height: 1.6; }
+.evento-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 22px; border-top: 1px solid rgba(200,145,58,0.12);
+}
+.evento-tipo-badge {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+}
+.academico     .evento-tipo-badge { background: rgba(27,63,107,0.35); color: #7ab3e8; }
+.institucional .evento-tipo-badge { background: rgba(200,145,58,0.2); color: var(--dorado-claro); }
+.comunidad     .evento-tipo-badge { background: rgba(46,138,84,0.25); color: #7adba4; }
+.evento-hora { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: rgba(244,237,224,0.35); letter-spacing: 0.08em; }
+
+/* FOOTER */
+footer {
+  background: rgba(0,0,0,0.35); border-top: 1px solid rgba(200,145,58,0.15);
+  padding: 14px 36px; text-align: center;
+}
+footer p {
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  color: rgba(244,237,224,0.3); letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .header-inner  { padding: 14px 18px; flex-wrap: wrap; gap: 12px; }
+  .main          { padding: 22px 16px 50px; }
+  .tabs-inner    { padding: 0 16px; }
+  .tab-btn       { padding: 11px 14px; font-size: 0.74rem; }
+  .seccion-header h2 { font-size: 1.4rem; }
+  .comunicado-card   { flex-direction: column; gap: 14px; }
+  .reloj-widget  { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-grupo">
+      <div class="escudo">🏫</div>
+      <div class="titulo-institucional">
+        <h1>Escuela Normal Superior<br>de Medellín</h1>
+        <p>Tablero de Comunicaciones Internas IENSM · 2026</p>
+      </div>
+    </div>
+    <div class="reloj-widget">
+      <div class="hora-actual" id="reloj">--:--</div>
+      <div class="fecha-actual" id="fechaHoy">cargando...</div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn activo" onclick="cambiarTab('avisos', this)">
+      📌 Avisos Importantes
+    </button>
+    <button class="tab-btn" onclick="cambiarTab('cronograma', this)">
+      📅 Cronograma del Año
+    </button>
+    <button class="tab-btn" onclick="cambiarTab('comunicados', this)">
+      📋 Comunicados por Sección
+    </button>
+    <button class="tab-btn" onclick="cambiarTab('eventos', this)">
+      💚 Bienestar Docente
+    </button>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- AVISOS -->
+  <section id="sec-avisos" class="seccion activa">
+    <div class="seccion-header">
+      <div>
+        <h2>Avisos Importantes</h2>
+        <p>Tablero de comunicaciones internas IENSM · Semana 7 · 2026</p>
+      </div>
+    </div>
+    <div class="tablero">
+
+      <div class="letrero urgente">
+        <div class="letrero-tipo">⚠ Urgente</div>
+        <h3>Primera revisión del máster por parte de coordinación</h3>
+        <p>Coordinación académica realizará la primera revisión del máster de cada docente. Estar disponible con la planeación del primer período, diario de campo y cargue de notas en planilla, todo a la fecha de esta semana 7 (9 al 13 de marzo).</p>
+        <div class="letrero-fecha"><strong>Cierre del máster · Domingo 15 de marzo</strong></div>
+      </div>
+
+      <div class="letrero info">
+        <div class="letrero-tipo">ℹ Información</div>
+        <h3>Pre informe primer período</h3>
+        <p>Semana 8 (entre el 16 y el 20 de marzo) se convocará a padres de familia para la entrega del pre informe académico del primer período. Estar atentos a la programación que se publicará.</p>
+        <div class="letrero-fecha"><strong>Cierre del máster para estudiantes · Viernes 13 de marzo</strong></div>
+      </div>
+
+      <div class="letrero general">
+        <div class="letrero-tipo">📌 En curso</div>
+        <h3>Promoción anticipada — Sustentaciones</h3>
+        <p>Semana 7 (en curso). Ya está disponible en la agenda semanal la programación y horarios para que los docentes atiendan a los estudiantes que harán la sustentación de la promoción anticipada.</p>
+        <div class="letrero-fecha">📅 Semana 7 · 9 al 13 de marzo · 2026</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CRONOGRAMA -->
+  <section id="sec-cronograma" class="seccion">
+    <div class="seccion-header">
+      <div>
+        <h2>Cronograma Año 2026</h2>
+        <p>Calendario académico institucional · Período lectivo 26 ene – 4 dic 2026</p>
+      </div>
+    </div>
+    <div class="cronograma-grid">
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Enero</span><span class="mes-num">MES 01</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">12–23</span><span class="evento-desc">Semanas institucionales N°1 y N°2 <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">26</span><span class="evento-desc">Inicio año lectivo estudiantes · Inicio primer período (13 semanas) <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">27–30</span><span class="evento-desc">Semana de inducción, reinducción y bienvenida estudiantes <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">28</span><span class="evento-desc">Jornada pedagógica · Actividad sindical ASDEM <span class="evento-tag tag-acad">Académico</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Febrero</span><span class="mes-num">MES 02 · Mes de Identidad Normalista</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">13</span><span class="evento-desc">Elección representante de grupos <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">16</span><span class="evento-desc">7:00 a.m. Promoción de participación estudiantil en liderazgo juvenil 8°, 9°, 10° <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">17</span><span class="evento-desc">11:00 a.m. Consejo Académico — configuración en máster · inicio Promoción Anticipada <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">18</span><span class="evento-desc">9:30 a.m. Evaluación Empleados de Servicios Generales del SGP <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">20</span><span class="evento-desc">11:00 a.m. Reunión Junta Directiva ASOEGRESADOS · Rectoría <span class="evento-tag tag-com">Comunidad</span></span></div>
+          <div class="evento-item"><span class="evento-dia">26</span><span class="evento-desc">Día del Docente Orientador <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Marzo</span><span class="mes-num">MES 03 · Mes de la Democracia</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">9–13</span><span class="evento-desc">Semana 7 · Promoción Anticipada estudiantes <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">13</span><span class="evento-desc">Último día entrega carta estudiantes para Promoción Anticipada · <strong>Cierre máster 1 preinforme</strong> · Día de la Democracia <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">16</span><span class="evento-desc">Consolidan preinforme docentes y diregrupos <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">17</span><span class="evento-desc">Comisión de evaluación <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">18</span><span class="evento-desc">Entrega preinforme primer período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">20</span><span class="evento-desc">Consejo Académico <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">23</span><span class="evento-desc">Festivo <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">30–31</span><span class="evento-desc">Semana Institucional N°3 <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">1 abr</span><span class="evento-desc">Día de la Familia — 1er semestre <span class="evento-tag tag-com">Comunidad</span></span></div>
+          <div class="evento-item"><span class="evento-dia">2–3 abr</span><span class="evento-desc">Festivos Semana Santa <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Abril</span><span class="mes-num">MES 04 · Mes Lectura, Escritura y Oralidad</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">6</span><span class="evento-desc">Día Mundial de la Actividad Física <span class="evento-tag tag-com">Comunidad</span></span></div>
+          <div class="evento-item"><span class="evento-dia">23</span><span class="evento-desc">Día del Libro y de la Lengua Española <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">24</span><span class="evento-desc">Día de la Secretaria · Día del Bibliotecólogo <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">27–30</span><span class="evento-desc">Actividades de apoyo período 1 · Autoevaluación, coevaluación y heteroevaluación <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">30</span><span class="evento-desc"><strong>Cierre máster primer período</strong> <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">1 may</span><span class="evento-desc">Festivo — Día del Trabajador <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Mayo</span><span class="mes-num">MES 05 · Mes del Pensamiento Pedagógico</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">4</span><span class="evento-desc">Inicia 2° período (13 semanas) <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">8</span><span class="evento-desc">Entrega boletines primer período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">15</span><span class="evento-desc">Día del Maestro (SED) <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">18</span><span class="evento-desc">Festivo <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Junio</span><span class="mes-num">MES 06 · Mes del Pensamiento Filosófico</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">8 y 15</span><span class="evento-desc">Festivos <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">19</span><span class="evento-desc"><strong>Cierre máster preinforme 2° período</strong> <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">22 jun–3 jul</span><span class="evento-desc">Vacaciones estudiantes y docentes <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Julio</span><span class="mes-num">MES 07 · Mes Pensamiento Lógico Matemático</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">6–10</span><span class="evento-desc">Semana Institucional N°4 <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">6</span><span class="evento-desc">Día del Servidor Público <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">7</span><span class="evento-desc">Consolidan preinforme docentes y diregrupos <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">9</span><span class="evento-desc">Entrega preinforme segundo período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">20</span><span class="evento-desc">Festivo — Independencia de Colombia <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">24</span><span class="evento-desc">Se presenta el domingo ICFES 2026 <span class="evento-tag tag-eval">Evaluación</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Agosto</span><span class="mes-num">MES 08 · Mes de la Cultura e Interculturalidad</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">7</span><span class="evento-desc">Festivo — Batalla de Boyacá <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">17–21</span><span class="evento-desc">Actividades de apoyo período 2 · Autoevaluación, coevaluación y heteroevaluación <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">21</span><span class="evento-desc"><strong>Cierra máster — termina 2° período</strong> <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">24</span><span class="evento-desc">Inicia 3° período <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">26</span><span class="evento-desc">Entrega boletines 2° período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Septiembre</span><span class="mes-num">MES 09 · Mes Pensamiento Científico y Tecnológico</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">2 oct</span><span class="evento-desc">Día Directivo Docente <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Octubre</span><span class="mes-num">MES 10 · Mes de la Inclusión y la Convivencia</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">5–9</span><span class="evento-desc">Semana Institucional N°5 <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">5</span><span class="evento-desc">Día Mundial de los Docentes <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">9</span><span class="evento-desc">Día Mundial de la Salud Mental · Día Trabajador Sindicalizado <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">12</span><span class="evento-desc">Festivo — Día de la Diversidad Étnica y Cultural <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">16</span><span class="evento-desc"><strong>Cierre máster para preinforme 3° período</strong> <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">19</span><span class="evento-desc">Consolidan preinforme docentes y diregrupos <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">22</span><span class="evento-desc">Entrega preinforme tercer período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Noviembre</span><span class="mes-num">MES 11 · Mes Prevención Sustancias Psicoactivas</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">2</span><span class="evento-desc">Festivo — Día de los Fieles Difuntos <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">16</span><span class="evento-desc">Festivo <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">23–27</span><span class="evento-desc">Actividades de apoyo período 3 · Autoevaluación, coevaluación y heteroevaluación <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">27</span><span class="evento-desc"><strong>Cierre máster 3° período</strong> <span class="evento-tag tag-eval">Evaluación</span></span></div>
+        </div>
+      </div>
+
+      <div class="mes-card">
+        <div class="mes-header"><span class="mes-nombre">Diciembre</span><span class="mes-num">MES 12</span></div>
+        <div class="mes-eventos">
+          <div class="evento-item"><span class="evento-dia">30 nov–2 dic</span><span class="evento-desc">Estrategias especiales de apoyo <span class="evento-tag tag-acad">Académico</span></span></div>
+          <div class="evento-item"><span class="evento-dia">4</span><span class="evento-desc">Graduación estudiantes Promoción 2026 · <strong>Fin año lectivo estudiantes</strong> <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">7</span><span class="evento-desc">Día de la Familia — 2° semestre · Semana Institucional N°6 <span class="evento-tag tag-com">Comunidad</span></span></div>
+          <div class="evento-item"><span class="evento-dia">8</span><span class="evento-desc">Festivo — Inmaculada Concepción <span class="evento-tag tag-inst">Institucional</span></span></div>
+          <div class="evento-item"><span class="evento-dia">10</span><span class="evento-desc">Entrega boletines 3° período <span class="evento-tag tag-eval">Evaluación</span></span></div>
+          <div class="evento-item"><span class="evento-dia">14 en adelante</span><span class="evento-desc">Vacaciones estudiantes y docentes <span class="evento-tag tag-inst">Institucional</span></span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMUNICADOS POR SECCIÓN -->
+  <section id="sec-comunicados" class="seccion">
+    <div class="seccion-header">
+      <div>
+        <h2>Comunicados por Sección</h2>
+        <p>Dirigidos a docentes según nivel y ciclo de formación</p>
+      </div>
+    </div>
+    <div class="comunicados-lista">
+
+      <div class="comunicado-card">
+        <div class="com-nivel"><span class="nivel-texto">Nivel</span><div class="nivel-grado">Pre<br>escolar</div></div>
+        <div class="com-body">
+          <h3>&nbsp;</h3>
+          <p>&nbsp;</p>
+          <div class="com-meta"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="comunicado-card">
+        <div class="com-nivel"><span class="nivel-texto">Nivel</span><div class="nivel-grado">Pri<br>maria</div></div>
+        <div class="com-body">
+          <h3>&nbsp;</h3>
+          <p>&nbsp;</p>
+          <div class="com-meta"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="comunicado-card">
+        <div class="com-nivel"><span class="nivel-texto">Nivel</span><div class="nivel-grado">Secun<br>daria</div></div>
+        <div class="com-body">
+          <h3>&nbsp;</h3>
+          <p>&nbsp;</p>
+          <div class="com-meta"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="comunicado-card">
+        <div class="com-nivel"><span class="nivel-texto">Nivel</span><div class="nivel-grado">Nor<br>malista</div></div>
+        <div class="com-body">
+          <h3>&nbsp;</h3>
+          <p>&nbsp;</p>
+          <div class="com-meta"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+      <div class="comunicado-card">
+        <div class="com-nivel"><span class="nivel-texto">Para</span><div class="nivel-grado">To<br>dos</div></div>
+        <div class="com-body">
+          <h3>&nbsp;</h3>
+          <p>&nbsp;</p>
+          <div class="com-meta"><span>&nbsp;</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BIENESTAR DOCENTE -->
+  <section id="sec-eventos" class="seccion">
+    <div class="seccion-header">
+      <div>
+        <h2>Bienestar Docente</h2>
+        <p>Información y actividades para el bienestar del equipo docente · 2026</p>
+      </div>
+    </div>
+    <div class="eventos-lista">
+
+      <div class="evento-card institucional">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 1</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="evento-card academico">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 2</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="evento-card comunidad">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 3</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="evento-card academico">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 4</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="evento-card comunidad">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 5</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+      <div class="evento-card institucional">
+        <div class="evento-banner"></div>
+        <div class="evento-cuerpo">
+          <div class="evento-fecha-badge"><span>📅 Próximamente</span></div>
+          <h3>Aviso 6</h3>
+          <p>&nbsp;</p>
+        </div>
+        <div class="evento-footer">
+          <span class="evento-tipo-badge">Bienestar</span>
+          <span class="evento-hora">&nbsp;</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>I.E. Escuela Normal Superior de Medellín · Tablero de Comunicaciones Internas IENSM · 2026 · Uso interno docentes</p>
+</footer>
+
+<script>
+function actualizarReloj() {
+  const ahora = new Date();
+  const h = String(ahora.getHours()).padStart(2,'0');
+  const m = String(ahora.getMinutes()).padStart(2,'0');
+  const dias   = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const meses  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  document.getElementById('reloj').textContent = `${h}:${m}`;
+  document.getElementById('fechaHoy').textContent =
+    `${dias[ahora.getDay()]} ${ahora.getDate()} ${meses[ahora.getMonth()]} · ${ahora.getFullYear()}`;
+}
+actualizarReloj();
+setInterval(actualizarReloj, 30000);
+
+function cambiarTab(seccion, btn) {
+  document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('activo'));
+  document.getElementById('sec-' + seccion).classList.add('activa');
+  btn.classList.add('activo');
+}
+</script>
+</body>
+</html>
